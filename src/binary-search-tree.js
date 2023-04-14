@@ -51,36 +51,54 @@ class BinarySearchTree {
     this.showTree(node && node.right);
   }
 
-  has(/* data */) {
-    throw new NotImplementedError('Not implemented');
+  has( data ) {
+    //throw new NotImplementedError('Not implemented');
     // remove line with error and write your code here
+    return !!this.find(data);
   }
 
-  find( data ) {
+  find( data, remove = false ) {
     //throw new NotImplementedError('Not implemented');
     // remove line with error and write your code here
     console.log('find data:', data);
-    const findNode = (point) => {
+    const findNode = (point, ancest, remove) => {
       if(point && point.data > data) {
         //console.log(point.data, 'point && point.data > data', (point && point.data > data) && 'left');
-        return findNode(point.left)
+        return findNode(point.left, point, remove)
       } else if (point && point.data < data) {
         //console.log(point.data, 'point && point.data < data', (point && point.data < data) && 'right');
-        return findNode(point.right)
+        return findNode(point.right, point, remove)
       } else if (point && point.data === data) {
         //console.log(point.data, point instanceof Node, 'point && point.data === data', (point && point.data === data) && point);
+        //console.log('remove && ancest && ancest.left && ancest.left === data', remove, ancest, ancest.left.data === data, remove && ancest && ancest.left && ancest.left === data)
+        if(remove && ancest && ancest.left && ancest.left.data === data) ancest.left = null;
+        //console.log('remove && ancest && ancest.right && ancest.right === data', remove, ancest, ancest.right.data === data, remove && ancest && ancest.right && ancest.right === data)
+        if(remove && ancest && ancest.right && ancest.right.data === data) ancest.right = null;
+        if(remove && !ancest) this._root = null;
         return point;  
       } else {
         //console.log('NEW');
         return null //new Node(null);
       }
     }
-    return findNode(this.root());
+    return findNode(this.root(), null, remove);
   }
 
-  remove(/* data */) {
-    throw new NotImplementedError('Not implemented');
+  remove( data ) {
+    //throw new NotImplementedError('Not implemented');
     // remove line with error and write your code here
+    const rebaseTree = (node, first = false) => {
+      if ( !node ) {
+        console.log('---------');
+        return;
+      }
+      //console.log(node, 'left', node && node.left);
+      //console.log(node, 'right', node && node.right);
+      if(!first) this.add(node.data);
+      rebaseTree(node.left);
+      rebaseTree(node.right);
+    }
+    rebaseTree(this.find(data, true), true);
   }
 
   min() {
@@ -100,16 +118,24 @@ module.exports = {
 };
 
 const tree = new BinarySearchTree();
-      tree.add(2);
-      tree.add(7);
-      tree.add(1);
-      tree.add(8);
-      tree.add(4);
-      tree.add(32);
-      tree.add(12);
-      tree.add(14);
-      tree.showTree(tree.root());
-      console.log(tree.find(2).data, 2);
-      console.log(tree.find(8).data, 8);
-      console.log(tree.find(14).data, 14);
-      console.log(tree.find(32).data, 32);
+tree.add(9);
+tree.add(14);
+tree.add(2);
+tree.add(6);
+tree.add(128);
+tree.add(8);
+tree.add(31);
+tree.add(54);
+tree.add(1);
+tree.remove(14);
+tree.remove(8);
+tree.remove(9);
+console.log(tree.has(14), false);
+console.log(tree.has(8), false);
+console.log(tree.has(9), false);
+console.log(tree.has(2), true);
+console.log(tree.has(6), true);
+console.log(tree.has(128), true);
+console.log(tree.has(31), true);
+console.log(tree.has(54), true);
+console.log(tree.has(1), true);
