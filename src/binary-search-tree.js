@@ -22,7 +22,7 @@ class BinarySearchTree {
   add( data ) {
     //throw new NotImplementedError('Not implemented');
     // remove line with error and write your code here
-    console.log("ADD - data:", data)
+    //console.log("ADD - data:", data)
     const addNode = (point) => {
       if(point && point.data > data) {
         point.left = addNode(point.left)
@@ -42,11 +42,11 @@ class BinarySearchTree {
 
   showTree( node ) {
     if ( !node ) {
-      console.log('---------');
+      //console.log('---------');
       return;
     }
-    console.log(node, 'left', node && node.left);
-    console.log(node, 'right', node && node.right);
+    //console.log(node, 'left', node && node.left);
+    //console.log(node, 'right', node && node.right);
     this.showTree(node && node.left);
     this.showTree(node && node.right);
   }
@@ -60,7 +60,7 @@ class BinarySearchTree {
   find( data, remove = false ) {
     //throw new NotImplementedError('Not implemented');
     // remove line with error and write your code here
-    console.log('find data:', data);
+    //console.log('find data:', data);
     const findNode = (point, ancest, remove) => {
       if(point && point.data > data) {
         //console.log(point.data, 'point && point.data > data', (point && point.data > data) && 'left');
@@ -101,14 +101,26 @@ class BinarySearchTree {
     rebaseTree(this.find(data, true), true);
   }
 
+  oneWayPassage(node, side) {
+    //if(!this.root()) return null;
+    if(!node) return null;
+    if(!node[side]) {
+      //console.log('MIN node.data', node.data);
+      return node.data;
+    }
+    return this.oneWayPassage(node[side], side);
+  } 
+
   min() {
-    throw new NotImplementedError('Not implemented');
+    //throw new NotImplementedError('Not implemented');
     // remove line with error and write your code here
+    return this.oneWayPassage(this.root(), 'left');
   }
 
   max() {
-    throw new NotImplementedError('Not implemented');
+    //throw new NotImplementedError('Not implemented');
     // remove line with error and write your code here
+    return this.oneWayPassage(this.root(), 'right');
   }
 }
 
@@ -118,24 +130,14 @@ module.exports = {
 };
 
 const tree = new BinarySearchTree();
-tree.add(9);
-tree.add(14);
-tree.add(2);
-tree.add(6);
-tree.add(128);
-tree.add(8);
-tree.add(31);
-tree.add(54);
-tree.add(1);
-tree.remove(14);
-tree.remove(8);
-tree.remove(9);
-console.log(tree.has(14), false);
-console.log(tree.has(8), false);
-console.log(tree.has(9), false);
-console.log(tree.has(2), true);
-console.log(tree.has(6), true);
-console.log(tree.has(128), true);
-console.log(tree.has(31), true);
-console.log(tree.has(54), true);
-console.log(tree.has(1), true);
+      tree.add(9);
+      tree.add(14);
+      tree.add(54);
+      tree.add(2);
+      tree.add(6);
+      tree.add(8);
+      tree.add(31);
+      tree.add(1);
+      tree.remove(6);
+      tree.remove(2);
+      console.log(tree.min(), 1);
